@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
+import { AppShell } from '@/components/shell/AppShell'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +28,9 @@ export default function RootLayout({
     <html lang="es" className="h-full">
       <body className={`${inter.className} h-full`}>
         <Providers>
-          {children}
+          <AppShell>
+            {children}
+          </AppShell>
           <Toaster
             position="top-right"
             toastOptions={{
