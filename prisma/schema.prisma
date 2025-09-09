@@ -61,6 +61,11 @@ model User {
   goalProgress  GoalProgress[]
   dailyCheckIns DailyCheckIn[]
   weeklyReviews WeeklyReview[]
+  
+  // Assessment relations
+  lifeWheelAssessment LifeWheelAssessment?
+  valuesAssessment    ValuesAssessment?
+  journalingAssessment JournalingAssessment?
 }
 
 model Habit {
@@ -231,4 +236,41 @@ model WeeklyReview {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, weekStart])
+}
+
+// Assessment Models
+model LifeWheelAssessment {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  scores      Json     // { health: 8, finances: 6, relationships: 9, ... }
+  completedAt DateTime @default(now())
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ValuesAssessment {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  values      String[] // Array of core values
+  completedAt DateTime @default(now())
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model JournalingAssessment {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  entries     Json     // { challenge_analysis: "text", values_alignment: "text", ... }
+  completedAt DateTime @default(now())
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
