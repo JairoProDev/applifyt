@@ -19,12 +19,12 @@ import { Button } from '@/components/ui/Button'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'Evaluación', href: '/assessment', icon: BookOpen },
   { name: 'Hábitos', href: '/habits', icon: CheckSquare },
   { name: 'Metas', href: '/goals', icon: Target },
-  { name: 'Progreso', href: '/progress', icon: BarChart3 },
-  { name: 'Check-in Diario', href: '/check-in', icon: Calendar },
   { name: 'Revisión Semanal', href: '/weekly-review', icon: BookOpen },
-  { name: 'Comunidad', href: '/community', icon: Users },
+  { name: 'Resiliencia', href: '/resilience', icon: Users },
+  { name: 'Trascender', href: '/transcend', icon: Users },
   { name: 'Configuración', href: '/settings', icon: Settings },
 ]
 
