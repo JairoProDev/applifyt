@@ -1,0 +1,234 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // For credentials auth
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // User profile data
+  bio           String?
+  timezone      String    @default("UTC")
+  preferences   Json?     // User preferences and settings
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  habits        Habit[]
+  goals         Goal[]
+  habitLogs     HabitLog[]
+  goalProgress  GoalProgress[]
+  dailyCheckIns DailyCheckIn[]
+  weeklyReviews WeeklyReview[]
+}
+
+model Habit {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Habit loop components (Atomic Habits)
+  cue         String   // Signal/trigger
+  routine     String   // Response/action
+  reward      String   // Reward
+  craving     String?  // What craving this satisfies
+
+  // Habit configuration
+  frequency   String   @default("daily") // daily, weekly, custom
+  targetCount Int      @default(1) // How many times per frequency
+  unit        String?  // e.g., "minutes", "pages", "glasses"
+  
+  // Habit stacking
+  stackAfter  String?  // Habit to stack after
+  stackBefore String?  // Habit to stack before
+  
+  // Environment design
+  environmentSetup Json? // Environment modifications needed
+  
+  // Status
+  isActive    Boolean  @default(true)
+  difficulty  Int      @default(1) // 1-5 scale
+  importance  Int      @default(1) // 1-5 scale
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  logs        HabitLog[]
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  date      DateTime @default(now())
+  completed Boolean  @default(false)
+  count     Int      @default(0) // For habits with targetCount > 1
+  notes     String?
+  mood      Int?     // 1-5 scale, how they felt doing it
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([habitId, date])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Goal hierarchy
+  parentGoalId String? // For sub-goals
+  parentGoal   Goal?   @relation("GoalHierarchy", fields: [parentGoalId], references: [id])
+  subGoals     Goal[]  @relation("GoalHierarchy")
+
+  // Goal type and level
+  type        String   // vision, annual, quarterly, monthly, weekly, project
+  level       Int      @default(1) // 1=vision, 2=annual, 3=quarterly, etc.
+  
+  // WOOP framework
+  wish        String   // What do you wish to achieve?
+  outcome     String   // Best possible outcome
+  obstacle    String   // Main obstacle
+  plan        String   // If-then plan
+  
+  // SMART criteria
+  specific    String   // Specific description
+  measurable  String   // How to measure
+  achievable  Boolean  @default(true)
+  relevant    String   // Why is this relevant?
+  timebound   DateTime // Deadline
+  
+  // Status and priority
+  status      String   @default("active") // active, completed, paused, cancelled
+  priority    Int      @default(1) // 1-5 scale
+  progress    Float    @default(0) // 0-100 percentage
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  progressLogs GoalProgress[]
+}
+
+model GoalProgress {
+  id        String   @id @default(cuid())
+  goalId    String
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  date      DateTime @default(now())
+  progress  Float    // Progress made (0-100)
+  notes     String?
+  evidence  String?  // Evidence of progress
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DailyCheckIn {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  date      DateTime @default(now())
+  
+  // Mood and energy
+  mood      Int      // 1-5 scale
+  energy    Int      // 1-5 scale
+  stress    Int      // 1-5 scale
+  
+  // Gratitude and reflection
+  gratitude String?  // What are you grateful for?
+  win       String?  // What was your win today?
+  challenge String?  // What was challenging?
+  lesson    String?  // What did you learn?
+  
+  // Goals and habits reflection
+  goalsProgress String? // How did you progress on goals?
+  habitsReflection String? // How did your habits go?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+}
+
+model WeeklyReview {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  weekStart DateTime // Start of the week
+  weekEnd   DateTime // End of the week
+  
+  // Review sections
+  wins      String[] // Array of wins
+  challenges String[] // Array of challenges
+  lessons   String[] // Array of lessons learned
+  
+  // Metrics summary
+  habitsCompleted Int @default(0)
+  goalsProgress   Float @default(0)
+  moodAverage     Float @default(0)
+  energyAverage   Float @default(0)
+  
+  // Next week planning
+  nextWeekFocus   String?
+  adjustments     String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, weekStart])
+}
