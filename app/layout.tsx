@@ -11,7 +11,11 @@ export const metadata: Metadata = {
   description: 'La plataforma para el crecimiento personal. Administra cada área de tu vida con el Protocolo U.P.L.I.F.T.',
   keywords: ['crecimiento personal', 'hábitos', 'metas', 'productividad', 'desarrollo personal'],
   authors: [{ name: 'Applify Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({

@@ -20,7 +20,8 @@ import toast from 'react-hot-toast'
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -36,7 +37,7 @@ export default function SignUpPage() {
   }
 
   const validateForm = () => {
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
       toast.error('Por favor completa todos los campos')
       return false
     }
@@ -74,7 +75,7 @@ export default function SignUpPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: formData.name,
+          name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           password: formData.password,
         }),
@@ -144,14 +145,24 @@ export default function SignUpPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <Input
-                label="Nombre completo"
-                type="text"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                placeholder="Tu nombre completo"
-                required
-              />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Input
+                  label="Nombres"
+                  type="text"
+                  value={formData.firstName}
+                  onChange={(e) => handleInputChange('firstName', e.target.value)}
+                  placeholder="Tus nombres"
+                  required
+                />
+                <Input
+                  label="Apellidos"
+                  type="text"
+                  value={formData.lastName}
+                  onChange={(e) => handleInputChange('lastName', e.target.value)}
+                  placeholder="Tus apellidos"
+                  required
+                />
+              </div>
 
               <Input
                 label="Correo electrónico"
@@ -237,7 +248,8 @@ export default function SignUpPage() {
               </Button>
             </form>
 
-            <div className="mt-6">
+            {/* Google OAuth temporarily disabled */}
+            {/* <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300" />
@@ -276,7 +288,7 @@ export default function SignUpPage() {
                   Continuar con Google
                 </Button>
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 
