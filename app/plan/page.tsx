@@ -270,14 +270,15 @@ export default function PlanPage() {
 
   return (
     <AppShell currentPage="plan">
-      <div className="p-4 lg:p-6">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Plan</h1>
-          <p className="text-gray-600">
-            Organiza tus metas, hábitos y calendario para un crecimiento estructurado
-          </p>
-        </div>
+      <div className="h-full overflow-y-auto">
+        <div className="max-w-7xl mx-auto p-6">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">Plan</h1>
+            <p className="text-lg text-gray-600">
+              Organiza tus metas, hábitos y calendario para un crecimiento estructurado
+            </p>
+          </div>
 
         {/* Tabs */}
         <div className="mb-6">
@@ -306,12 +307,13 @@ export default function PlanPage() {
           </div>
         </div>
 
-        {/* Content */}
-        <div className="space-y-6">
-          {activeTab === 'goals' && renderGoals()}
-          {activeTab === 'habits' && renderHabits()}
-          {activeTab === 'calendar' && renderCalendar()}
-          {activeTab === 'backlog' && renderBacklog()}
+          {/* Content */}
+          <div className="space-y-8">
+            {activeTab === 'goals' && renderGoals()}
+            {activeTab === 'habits' && renderHabits()}
+            {activeTab === 'calendar' && renderCalendar()}
+            {activeTab === 'backlog' && renderBacklog()}
+          </div>
         </div>
       </div>
     </AppShell>

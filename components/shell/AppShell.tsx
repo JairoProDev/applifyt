@@ -56,7 +56,7 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Top Bar - Always Visible */}
       <TopBar 
         onOpenKai={() => setIsKaiOpen(true)}
@@ -64,11 +64,11 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
         currentPage={currentPage}
       />
 
-      {/* Main Content Area */}
-      <div className="flex">
+      {/* Main Content Area - Desktop Optimized */}
+      <div className="flex flex-1 overflow-hidden">
         {/* Left Navigation - Desktop Only */}
-        <div className="hidden lg:block w-64 bg-white border-r border-gray-200">
-          <nav className="p-4 space-y-2">
+        <div className="hidden lg:block w-72 bg-white border-r border-gray-200 flex-shrink-0">
+          <nav className="p-6 space-y-3">
             {navigation.map((item) => {
               const Icon = item.icon
               const isActive = currentPage === item.id
@@ -77,29 +77,31 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
                 <button
                   key={item.id}
                   onClick={() => router.push(item.href)}
-                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                  className={`w-full flex items-center space-x-4 px-4 py-3 rounded-xl text-left transition-all duration-200 ${
                     isActive
-                      ? 'bg-primary-50 text-primary-600 border border-primary-200'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      ? 'bg-primary-50 text-primary-700 border border-primary-200 shadow-sm'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
-                  <Icon className="h-5 w-5" />
-                  <span className="font-medium">{item.name}</span>
+                  <Icon className="h-6 w-6" />
+                  <span className="font-medium text-lg">{item.name}</span>
                 </button>
               )
             })}
           </nav>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 flex">
-          {/* Central Surface */}
-          <div className="flex-1">
-            {children}
+        {/* Main Content - Full Width on Desktop */}
+        <div className="flex-1 flex flex-col lg:flex-row min-w-0">
+          {/* Central Surface - Takes most space on desktop */}
+          <div className="flex-1 min-w-0">
+            <div className="h-full overflow-y-auto">
+              {children}
+            </div>
           </div>
 
-          {/* Kai Drawer - Desktop Only */}
-          <div className="hidden lg:block w-80 border-l border-gray-200">
+          {/* Kai Drawer - Desktop Only - Fixed Width */}
+          <div className="hidden lg:block w-96 border-l border-gray-200 flex-shrink-0">
             <KaiDrawer 
               isOpen={isKaiOpen}
               onClose={() => setIsKaiOpen(false)}
@@ -110,7 +112,7 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
       </div>
 
       {/* Bottom Navigation - Mobile Only */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
         <BottomNav 
           navigation={navigation}
           currentPage={currentPage}

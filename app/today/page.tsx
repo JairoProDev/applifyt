@@ -30,7 +30,9 @@ export default function TodayPage() {
   const [isFocusMode, setIsFocusMode] = useState(false)
 
   if (!session) {
-    router.push('/auth/signin')
+    useEffect(() => {
+      router.push('/auth/signin')
+    }, [router])
     return null
   }
 
@@ -60,113 +62,124 @@ export default function TodayPage() {
 
   return (
     <AppShell currentPage="today">
-      <div className="p-4 lg:p-6 space-y-6">
-        {/* Hero Section - Next Action */}
-        <NextActionHero 
-          action={nextAction}
-          onStart={() => setIsFocusMode(true)}
-        />
-
-        {/* Action Stack - Next 3 Actions */}
-        <ActionStack 
-          actions={nextActions}
-          onStartAction={(action) => setIsFocusMode(true)}
-        />
-
-        {/* Quick Check-in */}
-        <QuickCheckIn />
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column */}
-          <div className="space-y-6">
-            {/* Today's Habits */}
-            <TodayHabits 
-              habits={dashboardData?.todayHabits || []}
-              onStartHabit={(habit) => setIsFocusMode(true)}
+      <div className="h-full overflow-y-auto">
+        <div className="max-w-7xl mx-auto p-6 space-y-8">
+          {/* Hero Section - Next Action */}
+          <div className="w-full">
+            <NextActionHero 
+              action={nextAction}
+              onStart={() => setIsFocusMode(true)}
             />
-
-            {/* Time Blocks */}
-            <TimeBlocks />
           </div>
 
-          {/* Right Column */}
-          <div className="space-y-6">
-            {/* Today's Tasks */}
-            <TodayTasks 
-              tasks={dashboardData?.todayGoals || []}
-              onStartTask={(task) => setIsFocusMode(true)}
+          {/* Action Stack - Next 3 Actions */}
+          <div className="w-full">
+            <ActionStack 
+              actions={nextActions}
+              onStartAction={(action) => setIsFocusMode(true)}
             />
-
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Zap className="h-5 w-5 mr-2 text-yellow-500" />
-                  Acciones Rápidas
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start"
-                  onClick={() => router.push('/plan')}
-                >
-                  <Target className="h-4 w-4 mr-2" />
-                  Planificar el día
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start"
-                  onClick={() => router.push('/progress')}
-                >
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Ver progreso
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start"
-                  onClick={() => router.push('/library')}
-                >
-                  <Clock className="h-4 w-4 mr-2" />
-                  Protocolos
-                </Button>
-              </CardContent>
-            </Card>
           </div>
-        </div>
 
-        {/* Focus Mode Overlay */}
-        {isFocusMode && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold mb-4">Modo Enfoque</h3>
-              <p className="text-gray-600 mb-6">
-                ¿Estás listo para concentrarte en tu siguiente acción?
-              </p>
-              <div className="flex space-x-3">
-                <Button 
-                  onClick={() => setIsFocusMode(false)}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  <Pause className="h-4 w-4 mr-2" />
-                  No ahora
-                </Button>
-                <Button 
-                  onClick={() => {
-                    setIsFocusMode(false)
-                    // Open Focus Player
-                  }}
-                  className="flex-1"
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  ¡Empezar!
-                </Button>
-              </div>
+          {/* Main Content Grid - Desktop Optimized */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {/* Left Column - Habits and Check-in */}
+            <div className="xl:col-span-1 space-y-6">
+              <QuickCheckIn />
+              <TodayHabits 
+                habits={dashboardData?.todayHabits || []}
+                onStartHabit={(habit) => setIsFocusMode(true)}
+              />
+            </div>
+
+            {/* Center Column - Tasks and Time Blocks */}
+            <div className="xl:col-span-1 space-y-6">
+              <TodayTasks 
+                tasks={dashboardData?.todayGoals || []}
+                onStartTask={(task) => setIsFocusMode(true)}
+              />
+              <TimeBlocks />
+            </div>
+
+            {/* Right Column - Quick Actions */}
+            <div className="xl:col-span-1 space-y-6">
+              <Card className="h-fit">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Zap className="h-5 w-5 mr-2 text-yellow-500" />
+                    Acciones Rápidas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start h-12"
+                    onClick={() => router.push('/plan')}
+                  >
+                    <Target className="h-5 w-5 mr-3" />
+                    <div className="text-left">
+                      <div className="font-medium">Planificar el día</div>
+                      <div className="text-sm text-gray-500">Organiza tus tareas</div>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start h-12"
+                    onClick={() => router.push('/progress')}
+                  >
+                    <CheckCircle className="h-5 w-5 mr-3" />
+                    <div className="text-left">
+                      <div className="font-medium">Ver progreso</div>
+                      <div className="text-sm text-gray-500">Analiza tu evolución</div>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start h-12"
+                    onClick={() => router.push('/library')}
+                  >
+                    <Clock className="h-5 w-5 mr-3" />
+                    <div className="text-left">
+                      <div className="font-medium">Protocolos</div>
+                      <div className="text-sm text-gray-500">Recursos y guías</div>
+                    </div>
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
-        )}
+
+          {/* Focus Mode Overlay */}
+          {isFocusMode && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-xl p-8 max-w-lg w-full mx-4 shadow-2xl">
+                <h3 className="text-xl font-semibold mb-4">Modo Enfoque</h3>
+                <p className="text-gray-600 mb-6">
+                  ¿Estás listo para concentrarte en tu siguiente acción?
+                </p>
+                <div className="flex space-x-4">
+                  <Button 
+                    onClick={() => setIsFocusMode(false)}
+                    variant="outline"
+                    className="flex-1 h-12"
+                  >
+                    <Pause className="h-5 w-5 mr-2" />
+                    No ahora
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      setIsFocusMode(false)
+                      // Open Focus Player
+                    }}
+                    className="flex-1 h-12"
+                  >
+                    <Play className="h-5 w-5 mr-2" />
+                    ¡Empezar!
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </AppShell>
   )

@@ -29,6 +29,7 @@ import {
 } from 'lucide-react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { ThemeSettings } from '@/components/theme/ThemeSettings'
 
 export default function MorePage() {
   const { data: session } = useSession()
@@ -222,6 +223,12 @@ export default function MorePage() {
               )
             })}
           </div>
+        </div>
+
+        {/* Theme Settings */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Personalización</h2>
+          <ThemeSettings />
         </div>
 
         {/* Settings Sections */}

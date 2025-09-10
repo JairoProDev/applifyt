@@ -9,9 +9,13 @@ import {
   Bell, 
   Calendar,
   Target,
-  Zap
+  Zap,
+  Sun,
+  Moon,
+  Palette
 } from 'lucide-react'
 import { useDashboard } from '@/hooks/useDashboard'
+import { useTheme } from '@/contexts/ThemeContext'
 import { formatDate } from '@/lib/utils'
 
 interface TopBarProps {
@@ -22,6 +26,7 @@ interface TopBarProps {
 
 export function TopBar({ onOpenKai, onOpenComposer, currentPage }: TopBarProps) {
   const { data: dashboardData, isLoading } = useDashboard()
+  const { theme, toggleTheme } = useTheme()
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -125,6 +130,16 @@ export function TopBar({ onOpenKai, onOpenComposer, currentPage }: TopBarProps) 
 
         {/* Right Section - Actions */}
         <div className="flex items-center space-x-2">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleTheme}
+            className="relative"
+          >
+            {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          </Button>
+
           {/* Notifications */}
           <Button
             variant="ghost"

@@ -84,17 +84,17 @@ export function NextActionHero({ action, onStart }: NextActionHeroProps) {
 
   return (
     <Card className="bg-gradient-to-r from-primary-50 to-primary-100 border-primary-200">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className={`p-2 rounded-lg bg-white ${getActionColor(action)}`}>
+      <CardContent className="p-8">
+        <div className="flex items-start justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className={`p-3 rounded-xl bg-white ${getActionColor(action)}`}>
               {getActionIcon(action)}
             </div>
             <div>
-              <Badge variant="primary" size="sm" className="mb-2">
+              <Badge variant="primary" size="sm" className="mb-3">
                 {getActionType(action)}
               </Badge>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-2xl font-semibold text-gray-900">
                 Siguiente Acción
               </h2>
             </div>
@@ -107,35 +107,35 @@ export function NextActionHero({ action, onStart }: NextActionHeroProps) {
           )}
         </div>
 
-        <div className="mb-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <div className="mb-8">
+          <h3 className="text-xl font-medium text-gray-900 mb-3 break-words">
             {action.name}
           </h3>
           {action.description && (
-            <p className="text-gray-600 mb-3">
+            <p className="text-gray-600 mb-4 break-words">
               {action.description}
             </p>
           )}
           
           {action.estimatedTime && (
             <div className="flex items-center text-sm text-gray-500">
-              <Clock className="h-4 w-4 mr-1" />
+              <Clock className="h-4 w-4 mr-2" />
               <span>{action.estimatedTime} minutos</span>
             </div>
           )}
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
             {action.streak && (
               <div className="flex items-center">
-                <Zap className="h-4 w-4 mr-1" />
+                <Zap className="h-4 w-4 mr-2" />
                 <span>{action.streak} días de racha</span>
               </div>
             )}
             {action.dueDate && (
               <div className="flex items-center">
-                <Target className="h-4 w-4 mr-1" />
+                <Target className="h-4 w-4 mr-2" />
                 <span>Vence hoy</span>
               </div>
             )}
@@ -144,11 +144,11 @@ export function NextActionHero({ action, onStart }: NextActionHeroProps) {
           <Button 
             onClick={onStart}
             size="lg"
-            className="bg-primary-600 hover:bg-primary-700 text-white px-6"
+            className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 text-lg"
           >
-            <Play className="h-5 w-5 mr-2" />
+            <Play className="h-6 w-6 mr-2" />
             Empezar Ahora
-            <ArrowRight className="h-4 w-4 ml-2" />
+            <ArrowRight className="h-5 w-5 ml-2" />
           </Button>
         </div>
       </CardContent>

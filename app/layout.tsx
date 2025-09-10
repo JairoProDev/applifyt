@@ -28,9 +28,7 @@ export default function RootLayout({
     <html lang="es" className="h-full">
       <body className={`${inter.className} h-full`}>
         <Providers>
-          <AppShell>
-            {children}
-          </AppShell>
+          {children}
           <Toaster
             position="top-right"
             toastOptions={{
