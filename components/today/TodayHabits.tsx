@@ -49,20 +49,27 @@ export function TodayHabits({ habits, onStartHabit }: TodayHabitsProps) {
 
   if (habits.length === 0) {
     return (
-      <Card>
-        <CardHeader>
+      <Card className="h-fit">
+        <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-lg">
             <Zap className="h-5 w-5 mr-2 text-green-500" />
             Hábitos de Hoy
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8">
-            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Zap className="h-6 w-6 text-gray-400" />
+          <div className="applify-empty-state">
+            <div className="applify-empty-icon">
+              <Zap className="h-8 w-8 text-green-500" />
             </div>
-            <p className="text-gray-500 mb-2">No hay hábitos programados para hoy</p>
-            <p className="text-sm text-gray-400">Crea tu primer hábito para empezar</p>
+            <h3 className="applify-empty-title">No hay hábitos programados</h3>
+            <p className="applify-empty-description">Crea tu primer hábito para empezar tu transformación</p>
+            <Button 
+              variant="outline" 
+              className="text-green-600 border-green-200 hover:bg-green-50 applify-button-md"
+            >
+              <Zap className="h-4 w-4 mr-2" />
+              Crear Hábito
+            </Button>
           </div>
         </CardContent>
       </Card>

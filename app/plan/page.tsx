@@ -271,11 +271,11 @@ export default function PlanPage() {
   return (
     <AppShell currentPage="plan">
       <div className="h-full overflow-y-auto">
-        <div className="max-w-7xl mx-auto p-6">
+        <div className="applify-container py-6">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-8 applify-fade-in">
             <h1 className="text-3xl font-bold text-gray-900 mb-3">Plan</h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 applify-text-balance">
               Organiza tus metas, hábitos y calendario para un crecimiento estructurado
             </p>
           </div>
@@ -308,7 +308,7 @@ export default function PlanPage() {
         </div>
 
           {/* Content */}
-          <div className="space-y-8">
+          <div className="space-y-8 applify-slide-up">
             {activeTab === 'goals' && renderGoals()}
             {activeTab === 'habits' && renderHabits()}
             {activeTab === 'calendar' && renderCalendar()}

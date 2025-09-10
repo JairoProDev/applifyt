@@ -83,60 +83,60 @@ export function NextActionHero({ action, onStart }: NextActionHeroProps) {
   }
 
   return (
-    <Card className="bg-gradient-to-r from-primary-50 to-primary-100 border-primary-200">
+    <Card className="bg-gradient-to-br from-primary-50 via-primary-100 to-primary-50 border-primary-200 shadow-lg applify-fade-in">
       <CardContent className="p-8">
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <div className={`p-3 rounded-xl bg-white ${getActionColor(action)}`}>
+            <div className={`p-4 rounded-2xl bg-white shadow-md ${getActionColor(action)}`}>
               {getActionIcon(action)}
             </div>
             <div>
               <Badge variant="primary" size="sm" className="mb-3">
                 {getActionType(action)}
               </Badge>
-              <h2 className="text-2xl font-semibold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900">
                 Siguiente Acción
               </h2>
             </div>
           </div>
           
           {action.priority && (
-            <Badge variant={getPriorityColor(action.priority)} size="sm">
+            <Badge variant={getPriorityColor(action.priority)} size="sm" className="shadow-sm">
               {getPriorityLabel(action.priority)}
             </Badge>
           )}
         </div>
 
         <div className="mb-8">
-          <h3 className="text-xl font-medium text-gray-900 mb-3 break-words">
+          <h3 className="text-xl font-semibold text-gray-900 mb-3 applify-text-balance">
             {action.name}
           </h3>
           {action.description && (
-            <p className="text-gray-600 mb-4 break-words">
+            <p className="text-gray-600 mb-4 applify-text-balance leading-relaxed">
               {action.description}
             </p>
           )}
           
           {action.estimatedTime && (
-            <div className="flex items-center text-sm text-gray-500">
+            <div className="flex items-center text-sm text-gray-500 bg-white/50 rounded-lg px-3 py-2 w-fit">
               <Clock className="h-4 w-4 mr-2" />
-              <span>{action.estimatedTime} minutos</span>
+              <span className="font-medium">{action.estimatedTime} minutos</span>
             </div>
           )}
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
             {action.streak && (
-              <div className="flex items-center">
-                <Zap className="h-4 w-4 mr-2" />
-                <span>{action.streak} días de racha</span>
+              <div className="flex items-center bg-white/50 rounded-lg px-3 py-2">
+                <Zap className="h-4 w-4 mr-2 text-yellow-500" />
+                <span className="font-medium">{action.streak} días de racha</span>
               </div>
             )}
             {action.dueDate && (
-              <div className="flex items-center">
-                <Target className="h-4 w-4 mr-2" />
-                <span>Vence hoy</span>
+              <div className="flex items-center bg-white/50 rounded-lg px-3 py-2">
+                <Target className="h-4 w-4 mr-2 text-red-500" />
+                <span className="font-medium">Vence hoy</span>
               </div>
             )}
           </div>
@@ -144,7 +144,7 @@ export function NextActionHero({ action, onStart }: NextActionHeroProps) {
           <Button 
             onClick={onStart}
             size="lg"
-            className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 text-lg"
+            className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 applify-scale-in"
           >
             <Play className="h-6 w-6 mr-2" />
             Empezar Ahora

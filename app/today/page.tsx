@@ -63,9 +63,9 @@ export default function TodayPage() {
   return (
     <AppShell currentPage="today">
       <div className="h-full overflow-y-auto">
-        <div className="max-w-7xl mx-auto p-6 space-y-8">
+        <div className="applify-container py-6 space-y-8">
           {/* Hero Section - Next Action */}
-          <div className="w-full">
+          <div className="w-full applify-slide-up">
             <NextActionHero 
               action={nextAction}
               onStart={() => setIsFocusMode(true)}
@@ -73,7 +73,7 @@ export default function TodayPage() {
           </div>
 
           {/* Action Stack - Next 3 Actions */}
-          <div className="w-full">
+          <div className="w-full applify-slide-up">
             <ActionStack 
               actions={nextActions}
               onStartAction={(action) => setIsFocusMode(true)}
@@ -81,9 +81,9 @@ export default function TodayPage() {
           </div>
 
           {/* Main Content Grid - Desktop Optimized */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          <div className="applify-grid-3 applify-slide-up">
             {/* Left Column - Habits and Check-in */}
-            <div className="xl:col-span-1 space-y-6">
+            <div className="applify-stack-lg">
               <QuickCheckIn />
               <TodayHabits 
                 habits={dashboardData?.todayHabits || []}
@@ -92,7 +92,7 @@ export default function TodayPage() {
             </div>
 
             {/* Center Column - Tasks and Time Blocks */}
-            <div className="xl:col-span-1 space-y-6">
+            <div className="applify-stack-lg">
               <TodayTasks 
                 tasks={dashboardData?.todayGoals || []}
                 onStartTask={(task) => setIsFocusMode(true)}
@@ -101,10 +101,10 @@ export default function TodayPage() {
             </div>
 
             {/* Right Column - Quick Actions */}
-            <div className="xl:col-span-1 space-y-6">
-              <Card className="h-fit">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
+            <div className="applify-stack-lg">
+              <Card className="h-fit applify-card shadow-lg">
+                <CardHeader className="applify-card-header">
+                  <CardTitle className="applify-card-title flex items-center">
                     <Zap className="h-5 w-5 mr-2 text-yellow-500" />
                     Acciones Rápidas
                   </CardTitle>
@@ -112,34 +112,34 @@ export default function TodayPage() {
                 <CardContent className="space-y-3">
                   <Button 
                     variant="outline" 
-                    className="w-full justify-start h-12"
+                    className="w-full justify-start applify-button-lg applify-hover applify-scale-in"
                     onClick={() => router.push('/plan')}
                   >
                     <Target className="h-5 w-5 mr-3" />
                     <div className="text-left">
-                      <div className="font-medium">Planificar el día</div>
+                      <div className="font-semibold">Planificar el día</div>
                       <div className="text-sm text-gray-500">Organiza tus tareas</div>
                     </div>
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="w-full justify-start h-12"
+                    className="w-full justify-start applify-button-lg applify-hover applify-scale-in"
                     onClick={() => router.push('/progress')}
                   >
                     <CheckCircle className="h-5 w-5 mr-3" />
                     <div className="text-left">
-                      <div className="font-medium">Ver progreso</div>
+                      <div className="font-semibold">Ver progreso</div>
                       <div className="text-sm text-gray-500">Analiza tu evolución</div>
                     </div>
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="w-full justify-start h-12"
+                    className="w-full justify-start applify-button-lg applify-hover applify-scale-in"
                     onClick={() => router.push('/library')}
                   >
                     <Clock className="h-5 w-5 mr-3" />
                     <div className="text-left">
-                      <div className="font-medium">Protocolos</div>
+                      <div className="font-semibold">Protocolos</div>
                       <div className="text-sm text-gray-500">Recursos y guías</div>
                     </div>
                   </Button>

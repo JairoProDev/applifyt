@@ -21,17 +21,17 @@ interface ActionStackProps {
 export function ActionStack({ actions, onStartAction }: ActionStackProps) {
   if (actions.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Próximas Acciones</CardTitle>
+      <Card className="h-fit applify-fade-in">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg font-semibold">Próximas Acciones</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8">
-            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Target className="h-6 w-6 text-gray-400" />
+          <div className="applify-empty-state">
+            <div className="applify-empty-icon">
+              <Target className="h-8 w-8 text-gray-400" />
             </div>
-            <p className="text-gray-500">No hay acciones pendientes</p>
-            <p className="text-sm text-gray-400">¡Excelente trabajo!</p>
+            <h3 className="applify-empty-title">No hay acciones pendientes</h3>
+            <p className="applify-empty-description">¡Excelente trabajo! Has completado todo lo planificado</p>
           </div>
         </CardContent>
       </Card>
@@ -69,9 +69,9 @@ export function ActionStack({ actions, onStartAction }: ActionStackProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Próximas Acciones</CardTitle>
+    <Card className="h-fit applify-fade-in">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold">Próximas Acciones</CardTitle>
         <p className="text-sm text-gray-500">
           {actions.length} acciones pendientes para hoy
         </p>
@@ -80,20 +80,20 @@ export function ActionStack({ actions, onStartAction }: ActionStackProps) {
         {actions.map((action, index) => (
           <div
             key={action.id || index}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-200 applify-hover"
           >
             <div className="flex items-center space-x-3 flex-1">
-              <div className={`p-1.5 rounded-md bg-white ${getActionColor(action)}`}>
+              <div className={`p-2 rounded-lg bg-white shadow-sm ${getActionColor(action)}`}>
                 {getActionIcon(action)}
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-2 mb-1">
-                  <h4 className="font-medium text-gray-900 truncate">
+                <div className="flex items-center space-x-2 mb-2">
+                  <h4 className="font-semibold text-gray-900 applify-text-truncate">
                     {action.name}
                   </h4>
                   {action.priority && (
-                    <Badge variant={getPriorityColor(action.priority)} size="sm">
+                    <Badge variant={getPriorityColor(action.priority)} size="sm" className="shadow-sm">
                       {getPriorityLabel(action.priority)}
                     </Badge>
                   )}
@@ -101,21 +101,21 @@ export function ActionStack({ actions, onStartAction }: ActionStackProps) {
                 
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
                   {action.estimatedTime && (
-                    <div className="flex items-center">
+                    <div className="flex items-center bg-white/50 rounded-md px-2 py-1">
                       <Clock className="h-3 w-3 mr-1" />
-                      <span>{action.estimatedTime}min</span>
+                      <span className="font-medium">{action.estimatedTime}min</span>
                     </div>
                   )}
                   {action.streak && (
-                    <div className="flex items-center">
-                      <Zap className="h-3 w-3 mr-1" />
-                      <span>{action.streak} días</span>
+                    <div className="flex items-center bg-white/50 rounded-md px-2 py-1">
+                      <Zap className="h-3 w-3 mr-1 text-yellow-500" />
+                      <span className="font-medium">{action.streak} días</span>
                     </div>
                   )}
                   {action.dueDate && (
-                    <div className="flex items-center">
-                      <Target className="h-3 w-3 mr-1" />
-                      <span>Vence hoy</span>
+                    <div className="flex items-center bg-white/50 rounded-md px-2 py-1">
+                      <Target className="h-3 w-3 mr-1 text-red-500" />
+                      <span className="font-medium">Vence hoy</span>
                     </div>
                   )}
                 </div>
@@ -127,7 +127,7 @@ export function ActionStack({ actions, onStartAction }: ActionStackProps) {
                 size="sm"
                 variant="outline"
                 onClick={() => onStartAction(action)}
-                className="text-primary-600 border-primary-200 hover:bg-primary-50"
+                className="text-primary-600 border-primary-200 hover:bg-primary-50 applify-button-sm"
               >
                 <Play className="h-4 w-4 mr-1" />
                 Empezar
@@ -136,7 +136,7 @@ export function ActionStack({ actions, onStartAction }: ActionStackProps) {
               <Button
                 size="sm"
                 variant="ghost"
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 applify-button-sm"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
@@ -148,7 +148,7 @@ export function ActionStack({ actions, onStartAction }: ActionStackProps) {
           <div className="pt-3 border-t border-gray-200">
             <Button
               variant="outline"
-              className="w-full text-gray-600 hover:text-gray-900"
+              className="w-full text-gray-600 hover:text-gray-900 applify-button-md applify-hover"
             >
               Ver todas las acciones
               <ArrowRight className="h-4 w-4 ml-2" />

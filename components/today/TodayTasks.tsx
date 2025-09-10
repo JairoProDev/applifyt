@@ -69,20 +69,27 @@ export function TodayTasks({ tasks, onStartTask }: TodayTasksProps) {
 
   if (tasks.length === 0) {
     return (
-      <Card>
-        <CardHeader>
+      <Card className="h-fit">
+        <CardHeader className="pb-4">
           <CardTitle className="flex items-center text-lg">
             <Target className="h-5 w-5 mr-2 text-blue-500" />
             Tareas de Hoy
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8">
-            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Target className="h-6 w-6 text-gray-400" />
+          <div className="applify-empty-state">
+            <div className="applify-empty-icon">
+              <Target className="h-8 w-8 text-blue-500" />
             </div>
-            <p className="text-gray-500 mb-2">No hay tareas programadas para hoy</p>
-            <p className="text-sm text-gray-400">Agrega tareas para organizar tu día</p>
+            <h3 className="applify-empty-title">No hay tareas programadas</h3>
+            <p className="applify-empty-description">Agrega tareas para organizar tu día y ser más productivo</p>
+            <Button 
+              variant="outline" 
+              className="text-blue-600 border-blue-200 hover:bg-blue-50 applify-button-md"
+            >
+              <Target className="h-4 w-4 mr-2" />
+              Agregar Tarea
+            </Button>
           </div>
         </CardContent>
       </Card>

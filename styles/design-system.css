@@ -1,0 +1,273 @@
+/* Design System - Applify */
+
+/* Spacing Scale */
+:root {
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+}
+
+/* Typography Scale */
+:root {
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+}
+
+/* Component Sizes */
+:root {
+  --button-sm: 2rem;      /* 32px */
+  --button-md: 2.5rem;    /* 40px */
+  --button-lg: 3rem;      /* 48px */
+  --button-xl: 3.5rem;    /* 56px */
+  
+  --input-sm: 2rem;       /* 32px */
+  --input-md: 2.5rem;     /* 40px */
+  --input-lg: 3rem;       /* 48px */
+  
+  --card-padding: 1.5rem; /* 24px */
+  --card-radius: 0.75rem; /* 12px */
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Consistent Component Classes */
+.applify-card {
+  @apply bg-white rounded-xl border border-gray-200 shadow-sm;
+  padding: var(--card-padding);
+}
+
+.applify-card-header {
+  @apply pb-4 mb-4 border-b border-gray-100;
+}
+
+.applify-card-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.applify-card-description {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+.applify-button {
+  @apply inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.applify-button-sm {
+  @apply applify-button px-3 py-1.5 text-sm;
+  height: var(--button-sm);
+}
+
+.applify-button-md {
+  @apply applify-button px-4 py-2 text-base;
+  height: var(--button-md);
+}
+
+.applify-button-lg {
+  @apply applify-button px-6 py-3 text-lg;
+  height: var(--button-lg);
+}
+
+.applify-input {
+  @apply w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors;
+}
+
+.applify-input-sm {
+  @apply applify-input;
+  height: var(--input-sm);
+}
+
+.applify-input-md {
+  @apply applify-input py-3;
+  height: var(--input-md);
+}
+
+.applify-input-lg {
+  @apply applify-input py-4 text-base;
+  height: var(--input-lg);
+}
+
+/* Empty State */
+.applify-empty-state {
+  @apply text-center py-12;
+}
+
+.applify-empty-icon {
+  @apply w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4;
+}
+
+.applify-empty-title {
+  @apply font-medium text-gray-900 mb-2;
+}
+
+.applify-empty-description {
+  @apply text-sm text-gray-500 mb-4;
+}
+
+/* Loading States */
+.applify-skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+.applify-skeleton-text {
+  @apply applify-skeleton h-4 w-full;
+}
+
+.applify-skeleton-button {
+  @apply applify-skeleton h-10 w-24;
+}
+
+/* Focus States */
+.applify-focus {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+/* Hover States */
+.applify-hover {
+  @apply hover:bg-gray-50 transition-colors duration-200;
+}
+
+/* Active States */
+.applify-active {
+  @apply bg-primary-50 text-primary-700 border-primary-200;
+}
+
+/* Responsive Utilities */
+.applify-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.applify-grid {
+  @apply grid gap-6;
+}
+
+.applify-grid-1 {
+  @apply applify-grid grid-cols-1;
+}
+
+.applify-grid-2 {
+  @apply applify-grid grid-cols-1 md:grid-cols-2;
+}
+
+.applify-grid-3 {
+  @apply applify-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.applify-grid-4 {
+  @apply applify-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4;
+}
+
+/* Animation Utilities */
+.applify-fade-in {
+  @apply opacity-0 animate-pulse;
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+.applify-slide-up {
+  @apply transform translate-y-4 opacity-0;
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.applify-scale-in {
+  @apply transform scale-95 opacity-0;
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(1rem); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+/* Status Colors */
+.applify-status-success {
+  @apply text-green-600 bg-green-50 border-green-200;
+}
+
+.applify-status-warning {
+  @apply text-yellow-600 bg-yellow-50 border-yellow-200;
+}
+
+.applify-status-error {
+  @apply text-red-600 bg-red-50 border-red-200;
+}
+
+.applify-status-info {
+  @apply text-blue-600 bg-blue-50 border-blue-200;
+}
+
+/* Text Utilities */
+.applify-text-truncate {
+  @apply truncate;
+}
+
+.applify-text-balance {
+  @apply text-balance;
+}
+
+/* Layout Utilities */
+.applify-stack {
+  @apply flex flex-col;
+}
+
+.applify-stack-sm {
+  @apply applify-stack space-y-2;
+}
+
+.applify-stack-md {
+  @apply applify-stack space-y-4;
+}
+
+.applify-stack-lg {
+  @apply applify-stack space-y-6;
+}
+
+.applify-cluster {
+  @apply flex flex-wrap gap-2;
+}
+
+.applify-cluster-sm {
+  @apply applify-cluster gap-1;
+}
+
+.applify-cluster-md {
+  @apply applify-cluster gap-2;
+}
+
+.applify-cluster-lg {
+  @apply applify-cluster gap-3;
+}

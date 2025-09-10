@@ -137,20 +137,23 @@ export function TimeBlocks() {
   const upcomingBlocks = timeBlocks.filter(block => getBlockStatus(block) === 'upcoming').slice(0, 3)
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center text-lg">
-          <Clock className="h-5 w-5 mr-2 text-blue-500" />
-          Bloques de Tiempo
-        </CardTitle>
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            {getCurrentTimeString()} - {currentBlock ? `Bloque actual: ${currentBlock.title}` : 'Sin bloque activo'}
-          </p>
-          <Button size="sm" variant="outline">
+    <Card className="h-fit">
+      <CardHeader className="pb-4">
+        <div className="flex items-center justify-between mb-3">
+          <CardTitle className="flex items-center text-lg">
+            <Clock className="h-5 w-5 mr-2 text-blue-500" />
+            Bloques de Tiempo
+          </CardTitle>
+          <Button size="sm" variant="outline" className="applify-button-sm">
             <Plus className="h-4 w-4 mr-1" />
             Agregar
           </Button>
+        </div>
+        <div className="flex items-center space-x-2 text-sm text-gray-600">
+          <Clock className="h-4 w-4" />
+          <span>{getCurrentTimeString()}</span>
+          <span>•</span>
+          <span>{currentBlock ? `Bloque actual: ${currentBlock.title}` : 'Sin bloque activo'}</span>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
