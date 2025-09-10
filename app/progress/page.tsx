@@ -41,50 +41,36 @@ export default function ProgressPage() {
 
   const stats = {
     habits: {
-      total: 12,
-      completed: 8,
-      streak: 15,
-      bestStreak: 30
+      total: 0,
+      completed: 0,
+      streak: 0,
+      bestStreak: 0
     },
     goals: {
-      total: 5,
-      completed: 2,
-      inProgress: 3,
-      successRate: 67
+      total: 0,
+      completed: 0,
+      inProgress: 0,
+      successRate: 0
     },
     productivity: {
-      focusTime: 4.5,
-      tasksCompleted: 23,
-      efficiency: 85
+      focusTime: 0,
+      tasksCompleted: 0,
+      efficiency: 0
     },
     wellbeing: {
-      averageMood: 4.2,
-      energyLevel: 3.8,
-      stressLevel: 2.1
+      averageMood: 0,
+      energyLevel: 0,
+      stressLevel: 0
     }
   }
 
   const insights = [
     {
-      type: 'positive',
-      icon: <TrendingUp className="h-5 w-5" />,
-      title: 'Racha de hábitos en aumento',
-      description: 'Has mantenido una racha de 15 días consecutivos. ¡Sigue así!',
-      impact: 'high'
-    },
-    {
-      type: 'warning',
-      icon: <Clock className="h-5 w-5" />,
-      title: 'Tiempo de enfoque bajo',
-      description: 'Tu tiempo de enfoque ha disminuido un 20% esta semana.',
-      impact: 'medium'
-    },
-    {
-      type: 'positive',
-      icon: <Heart className="h-5 w-5" />,
-      title: 'Bienestar mejorando',
-      description: 'Tu nivel de estrés ha bajado significativamente.',
-      impact: 'high'
+      type: 'info',
+      icon: <Brain className="h-5 w-5" />,
+      title: 'Comienza tu viaje',
+      description: 'Aún no tienes datos suficientes para generar insights. ¡Empieza a usar la plataforma!',
+      impact: 'low'
     }
   ]
 
@@ -93,6 +79,7 @@ export default function ProgressPage() {
       case 'positive': return 'text-green-600 bg-green-50 border-green-200'
       case 'warning': return 'text-yellow-600 bg-yellow-50 border-yellow-200'
       case 'negative': return 'text-red-600 bg-red-50 border-red-200'
+      case 'info': return 'text-blue-600 bg-blue-50 border-blue-200'
       default: return 'text-gray-600 bg-gray-50 border-gray-200'
     }
   }
@@ -120,7 +107,7 @@ export default function ProgressPage() {
 
   return (
     <AppShell currentPage="progress">
-      <div className="p-4 lg:p-6 space-y-6">
+      <div className="w-full max-w-none px-4 lg:px-6 py-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -265,10 +252,10 @@ export default function ProgressPage() {
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { name: 'Meditación', progress: 85, streak: 15 },
-                  { name: 'Ejercicio', progress: 70, streak: 8 },
-                  { name: 'Lectura', progress: 60, streak: 5 },
-                  { name: 'Escritura', progress: 45, streak: 3 }
+                  { name: 'Meditación', progress: 0, streak: 0 },
+                  { name: 'Ejercicio', progress: 0, streak: 0 },
+                  { name: 'Lectura', progress: 0, streak: 0 },
+                  { name: 'Escritura', progress: 0, streak: 0 }
                 ].map((habit, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center justify-between">

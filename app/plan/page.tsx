@@ -271,7 +271,7 @@ export default function PlanPage() {
   return (
     <AppShell currentPage="plan">
       <div className="h-full overflow-y-auto">
-        <div className="applify-container py-6">
+        <div className="w-full max-w-none px-4 lg:px-6 py-6">
           {/* Header */}
           <div className="mb-8 applify-fade-in">
             <h1 className="text-3xl font-bold text-gray-900 mb-3">Plan</h1>

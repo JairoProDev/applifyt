@@ -63,15 +63,32 @@ export function TopBar({ onOpenKai, onOpenComposer, currentPage }: TopBarProps) 
   return (
     <div className="bg-white border-b border-gray-200 px-4 py-3">
       <div className="flex items-center justify-between">
-        {/* Left Section - Date & Progress */}
+        {/* Left Section - App Name & Current Page */}
         <div className="flex items-center space-x-4">
-          <div>
-            <h1 className="text-lg font-semibold text-gray-900">
-              Hoy
+          <div className="flex items-center space-x-3">
+            <h1 className="text-xl font-bold text-primary-600">
+              Applify
             </h1>
-            <p className="text-sm text-gray-500">
+            <span className="text-gray-400">•</span>
+            <span className="text-lg font-semibold text-gray-700">
+              {currentPage === 'today' && 'Hoy'}
+              {currentPage === 'plan' && 'Plan'}
+              {currentPage === 'progress' && 'Progreso'}
+              {currentPage === 'library' && 'Biblioteca'}
+              {currentPage === 'more' && 'Más'}
+            </span>
+          </div>
+          
+          <div className="text-center">
+            <div className="text-lg font-mono font-bold text-gray-900">
+              {currentTime.toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}
+            </div>
+            <div className="text-xs text-gray-500">
               {formatDate(currentTime, 'EEEE, d MMMM')}
-            </p>
+            </div>
           </div>
           
           {/* Progress Circle */}

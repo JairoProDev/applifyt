@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
-export type Theme = 'light' | 'dark'
+export type Theme = 'light' | 'dark' | 'system'
 export type ColorScheme = 'blue' | 'green' | 'purple' | 'red' | 'orange' | 'pink' | 'indigo' | 'teal'
 export type StylePreset = 'modern' | 'minimal' | 'vintage' | 'tech' | 'scientific' | 'retro' | 'neon' | 'cyberpunk' | 'elegant' | 'playful'
 
@@ -19,9 +19,16 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light')
+  const [theme, setTheme] = useState<Theme>('system')
   const [colorScheme, setColorScheme] = useState<ColorScheme>('blue')
   const [stylePreset, setStylePreset] = useState<StylePreset>('modern')
+
+  const getCurrentTheme = () => {
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+    return theme
+  }
 
   useEffect(() => {
     // Load saved preferences
@@ -41,10 +48,27 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('applify-style-preset', stylePreset)
 
     // Apply theme to document
-    document.documentElement.setAttribute('data-theme', theme)
+    const currentTheme = getCurrentTheme()
+    document.documentElement.setAttribute('data-theme', currentTheme)
     document.documentElement.setAttribute('data-color-scheme', colorScheme)
     document.documentElement.setAttribute('data-style-preset', stylePreset)
+    document.documentElement.classList.toggle('dark', currentTheme === 'dark')
   }, [theme, colorScheme, stylePreset])
+
+  // Listen for system theme changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = () => {
+      if (theme === 'system') {
+        const currentTheme = getCurrentTheme()
+        document.documentElement.setAttribute('data-theme', currentTheme)
+        document.documentElement.classList.toggle('dark', currentTheme === 'dark')
+      }
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [theme])
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light')

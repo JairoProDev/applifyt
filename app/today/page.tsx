@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AppShell } from '@/components/shell/AppShell'
 import { NextActionHero } from '@/components/today/NextActionHero'
 import { ActionStack } from '@/components/today/ActionStack'
@@ -26,13 +26,17 @@ import { useRouter } from 'next/navigation'
 export default function TodayPage() {
   const { data: session } = useSession()
   const router = useRouter()
-  const { data: dashboardData, isLoading } = useDashboard()
+  const { dashboardData, loading: isLoading } = useDashboard()
   const [isFocusMode, setIsFocusMode] = useState(false)
 
-  if (!session) {
-    useEffect(() => {
+  // Redirect to signin if not authenticated
+  useEffect(() => {
+    if (!session) {
       router.push('/auth/signin')
-    }, [router])
+    }
+  }, [session, router])
+
+  if (!session) {
     return null
   }
 
@@ -51,19 +55,19 @@ export default function TodayPage() {
   }
 
   // Get next action (highest priority task or first habit)
-  const nextAction = dashboardData?.todayGoals.find(g => !g.completed) || 
-                   dashboardData?.todayHabits.find(h => !h.completed)
+  const nextAction = dashboardData?.goals.find((g: any) => !g.completed) || 
+                   dashboardData?.habits.find((h: any) => !h.completed)
 
   // Get next 3 actions
   const nextActions = [
-    ...(dashboardData?.todayGoals.filter(g => !g.completed) || []),
-    ...(dashboardData?.todayHabits.filter(h => !h.completed) || [])
+    ...(dashboardData?.goals.filter((g: any) => !g.completed) || []),
+    ...(dashboardData?.habits.filter((h: any) => !h.completed) || [])
   ].slice(0, 3)
 
   return (
     <AppShell currentPage="today">
       <div className="h-full overflow-y-auto">
-        <div className="applify-container py-6 space-y-8">
+        <div className="w-full max-w-none px-4 lg:px-6 py-6 space-y-8">
           {/* Hero Section - Next Action */}
           <div className="w-full applify-slide-up">
             <NextActionHero 
@@ -86,7 +90,7 @@ export default function TodayPage() {
             <div className="applify-stack-lg">
               <QuickCheckIn />
               <TodayHabits 
-                habits={dashboardData?.todayHabits || []}
+                habits={dashboardData?.habits || []}
                 onStartHabit={(habit) => setIsFocusMode(true)}
               />
             </div>
@@ -94,7 +98,7 @@ export default function TodayPage() {
             {/* Center Column - Tasks and Time Blocks */}
             <div className="applify-stack-lg">
               <TodayTasks 
-                tasks={dashboardData?.todayGoals || []}
+                tasks={dashboardData?.goals || []}
                 onStartTask={(task) => setIsFocusMode(true)}
               />
               <TimeBlocks />

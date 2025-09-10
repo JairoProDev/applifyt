@@ -70,12 +70,12 @@ export function ThemeSettings() {
               <span>Oscuro</span>
             </Button>
             <Button
-              variant="outline"
-              onClick={toggleTheme}
+              variant={theme === 'system' ? 'default' : 'outline'}
+              onClick={() => setTheme('system')}
               className="flex items-center space-x-2"
             >
               <Monitor className="h-4 w-4" />
-              <span>Auto</span>
+              <span>Sistema</span>
             </Button>
           </div>
         </CardContent>

@@ -151,7 +151,7 @@ export default function LibraryPage() {
 
   return (
     <AppShell currentPage="library">
-      <div className="p-4 lg:p-6 space-y-6">
+      <div className="w-full max-w-none px-4 lg:px-6 py-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -252,7 +252,7 @@ export default function LibraryPage() {
                         <Badge variant={getDifficultyColor(protocol.difficulty)} size="sm">
                           {protocol.difficulty}
                         </Badge>
-                        <Button size="sm">
+                        <Button size="sm" className="px-3">
                           <Play className="h-4 w-4 mr-1" />
                           Aplicar
                         </Button>
@@ -330,10 +330,10 @@ export default function LibraryPage() {
                           {protocol.difficulty}
                         </Badge>
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" className="px-3">
                             <Download className="h-4 w-4" />
                           </Button>
-                          <Button size="sm">
+                          <Button size="sm" className="px-3">
                             <Play className="h-4 w-4 mr-1" />
                             Aplicar
                           </Button>

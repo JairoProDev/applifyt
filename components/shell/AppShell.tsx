@@ -31,6 +31,7 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
   const [isComposerOpen, setIsComposerOpen] = useState(false)
   const [isFocusPlayerOpen, setIsFocusPlayerOpen] = useState(false)
   const [currentAction, setCurrentAction] = useState(null)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   const navigation = [
     { id: 'today', name: 'Hoy', icon: Home, href: '/today' },
@@ -66,9 +67,26 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
 
       {/* Main Content Area - Desktop Optimized */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Navigation - Desktop Only */}
-        <div className="hidden lg:block w-72 bg-white border-r border-gray-200 flex-shrink-0">
+        {/* Left Navigation - Desktop Only - Retractable */}
+        <div className={`hidden lg:block bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 ${
+          isSidebarCollapsed ? 'w-16' : 'w-72'
+        }`}>
           <nav className="p-6 space-y-3">
+            {/* Toggle Button */}
+            <button
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="w-full flex items-center justify-center px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-all duration-200"
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                <div className={`w-4 h-0.5 bg-current transition-all duration-200 ${
+                  isSidebarCollapsed ? 'rotate-90' : '-rotate-90'
+                }`}></div>
+              </div>
+              {!isSidebarCollapsed && (
+                <span className="ml-3 font-medium text-sm">Colapsar</span>
+              )}
+            </button>
+
             {navigation.map((item) => {
               const Icon = item.icon
               const isActive = currentPage === item.id
@@ -77,14 +95,24 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
                 <button
                   key={item.id}
                   onClick={() => router.push(item.href)}
-                  className={`w-full flex items-center space-x-4 px-4 py-3 rounded-xl text-left transition-all duration-200 ${
+                  className={`w-full flex items-center px-4 py-3 rounded-xl text-left transition-all duration-200 group relative ${
                     isActive
                       ? 'bg-primary-50 text-primary-700 border border-primary-200 shadow-sm'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                   }`}
+                  title={isSidebarCollapsed ? item.name : ''}
                 >
-                  <Icon className="h-6 w-6" />
-                  <span className="font-medium text-lg">{item.name}</span>
+                  <Icon className="h-6 w-6 flex-shrink-0" />
+                  {!isSidebarCollapsed && (
+                    <span className="ml-4 font-medium text-lg">{item.name}</span>
+                  )}
+                  
+                  {/* Tooltip for collapsed state */}
+                  {isSidebarCollapsed && (
+                    <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      {item.name}
+                    </div>
+                  )}
                 </button>
               )
             })}
@@ -109,6 +137,19 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
             />
           </div>
         </div>
+      </div>
+
+      {/* Floating Kai Button - Desktop */}
+      <div className="hidden lg:block fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setIsKaiOpen(true)}
+          className="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
+        >
+          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+            <span className="text-sm font-bold text-blue-600">K</span>
+          </div>
+          <div className="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+        </button>
       </div>
 
       {/* Bottom Navigation - Mobile Only */}
