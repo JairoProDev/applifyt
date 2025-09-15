@@ -149,31 +149,8 @@ export function KaiDrawer({ isOpen, onClose, currentPage, isMobile = false }: Ka
   }
 
   const getContextualInsights = () => {
-    const insights = [
-      {
-        type: 'energy',
-        icon: <Zap className="h-4 w-4" />,
-        title: 'Energía Alta',
-        message: 'Es un buen momento para tareas creativas',
-        color: 'text-green-600'
-      },
-      {
-        type: 'focus',
-        icon: <Target className="h-4 w-4" />,
-        title: 'Enfoque Optimizado',
-        message: 'Tu concentración está en su pico',
-        color: 'text-blue-600'
-      },
-      {
-        type: 'streak',
-        icon: <TrendingUp className="h-4 w-4" />,
-        title: 'Racha de 7 días',
-        message: '¡Sigue así! Estás construyendo momentum',
-        color: 'text-purple-600'
-      }
-    ]
-
-    return insights
+    // Return empty insights for new users
+    return []
   }
 
   const getQuickActions = () => {
@@ -190,7 +167,7 @@ export function KaiDrawer({ isOpen, onClose, currentPage, isMobile = false }: Ka
   if (!isOpen) return null
 
   return (
-    <div className={`fixed ${isMobile ? 'bottom-0 left-0 right-0' : 'right-0 top-0 h-full'} z-40`}>
+    <div className={`fixed ${isMobile ? 'bottom-0 left-0 right-0' : 'right-0 top-16 h-[calc(100vh-4rem)]'} z-40`}>
       <div className={`bg-white border-l border-gray-200 h-full ${isMobile ? 'rounded-t-lg' : ''} flex flex-col`}>
         {/* Header */}
         <div className="p-4 border-b border-gray-200">

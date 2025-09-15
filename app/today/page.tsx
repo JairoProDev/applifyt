@@ -67,7 +67,7 @@ export default function TodayPage() {
   return (
     <AppShell currentPage="today">
       <div className="h-full overflow-y-auto">
-        <div className="w-full max-w-none px-4 lg:px-6 py-6 space-y-8">
+        <div className="w-full px-6 py-6 space-y-6">
           {/* Hero Section - Next Action */}
           <div className="w-full applify-slide-up">
             <NextActionHero 
@@ -85,9 +85,9 @@ export default function TodayPage() {
           </div>
 
           {/* Main Content Grid - Desktop Optimized */}
-          <div className="applify-grid-3 applify-slide-up">
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 applify-slide-up">
             {/* Left Column - Habits and Check-in */}
-            <div className="applify-stack-lg">
+            <div className="xl:col-span-1 space-y-6">
               <QuickCheckIn />
               <TodayHabits 
                 habits={dashboardData?.habits || []}
@@ -96,7 +96,7 @@ export default function TodayPage() {
             </div>
 
             {/* Center Column - Tasks and Time Blocks */}
-            <div className="applify-stack-lg">
+            <div className="xl:col-span-2 space-y-6">
               <TodayTasks 
                 tasks={dashboardData?.goals || []}
                 onStartTask={(task) => setIsFocusMode(true)}
@@ -105,7 +105,7 @@ export default function TodayPage() {
             </div>
 
             {/* Right Column - Quick Actions */}
-            <div className="applify-stack-lg">
+            <div className="xl:col-span-1 space-y-6">
               <Card className="h-fit applify-card shadow-lg">
                 <CardHeader className="applify-card-header">
                   <CardTitle className="applify-card-title flex items-center">

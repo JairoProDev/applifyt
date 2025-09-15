@@ -53,7 +53,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.setAttribute('data-color-scheme', colorScheme)
     document.documentElement.setAttribute('data-style-preset', stylePreset)
     document.documentElement.classList.toggle('dark', currentTheme === 'dark')
+    
+    // Apply CSS custom properties for theming
+    const root = document.documentElement
+    root.style.setProperty('--applify-primary-color', getColorValue(colorScheme))
+    root.style.setProperty('--applify-style-preset', stylePreset)
   }, [theme, colorScheme, stylePreset])
+
+  const getColorValue = (color: ColorScheme) => {
+    const colors = {
+      blue: '#3b82f6',
+      green: '#22c55e',
+      purple: '#a855f7',
+      red: '#ef4444',
+      orange: '#f97316',
+      pink: '#ec4899',
+      indigo: '#6366f1',
+      teal: '#14b8a6'
+    }
+    return colors[color] || colors.blue
+  }
 
   // Listen for system theme changes
   useEffect(() => {

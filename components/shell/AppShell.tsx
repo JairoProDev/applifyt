@@ -67,60 +67,82 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
 
       {/* Main Content Area - Desktop Optimized */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Navigation - Desktop Only - Retractable */}
-        <div className={`hidden lg:block bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 ${
-          isSidebarCollapsed ? 'w-16' : 'w-72'
-        }`}>
-          <nav className="p-6 space-y-3">
-            {/* Toggle Button */}
-            <button
-              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              className="w-full flex items-center justify-center px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-all duration-200"
-            >
-              <div className="w-6 h-6 flex items-center justify-center">
-                <div className={`w-4 h-0.5 bg-current transition-all duration-200 ${
-                  isSidebarCollapsed ? 'rotate-90' : '-rotate-90'
-                }`}></div>
-              </div>
+        {/* Left Navigation - Desktop Only - Retractable with Hover */}
+        <div 
+          className={`hidden lg:block bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 sticky top-0 h-screen ${
+            isSidebarCollapsed ? 'w-16 hover:w-72' : 'w-72'
+          }`}
+          onMouseEnter={() => setIsSidebarCollapsed(false)}
+          onMouseLeave={() => setIsSidebarCollapsed(true)}
+        >
+          <nav className="p-4 space-y-2 h-full flex flex-col">
+            {/* Header with Toggle Button */}
+            <div className="flex items-center justify-between mb-4">
               {!isSidebarCollapsed && (
-                <span className="ml-3 font-medium text-sm">Colapsar</span>
+                <h2 className="text-lg font-semibold text-gray-800">Navegación</h2>
               )}
-            </button>
+              <button
+                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-all duration-200"
+                title={isSidebarCollapsed ? 'Expandir' : 'Colapsar'}
+              >
+                <div className="w-4 h-4 flex items-center justify-center">
+                  <div className={`w-3 h-0.5 bg-current transition-all duration-200 ${
+                    isSidebarCollapsed ? 'rotate-90' : '-rotate-90'
+                  }`}></div>
+                </div>
+              </button>
+            </div>
 
-            {navigation.map((item) => {
-              const Icon = item.icon
-              const isActive = currentPage === item.id
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => router.push(item.href)}
-                  className={`w-full flex items-center px-4 py-3 rounded-xl text-left transition-all duration-200 group relative ${
-                    isActive
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200 shadow-sm'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                  title={isSidebarCollapsed ? item.name : ''}
-                >
-                  <Icon className="h-6 w-6 flex-shrink-0" />
-                  {!isSidebarCollapsed && (
-                    <span className="ml-4 font-medium text-lg">{item.name}</span>
-                  )}
-                  
-                  {/* Tooltip for collapsed state */}
-                  {isSidebarCollapsed && (
-                    <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                      {item.name}
-                    </div>
-                  )}
-                </button>
-              )
-            })}
+            {/* Navigation Items */}
+            <div className="flex-1 space-y-1">
+              {navigation.map((item) => {
+                const Icon = item.icon
+                const isActive = currentPage === item.id
+                
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => router.push(item.href)}
+                    className={`w-full flex items-center px-3 py-2.5 rounded-lg text-left transition-all duration-200 group relative ${
+                      isActive
+                        ? 'bg-primary-50 text-primary-700 border border-primary-200 shadow-sm'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                    title={isSidebarCollapsed ? item.name : ''}
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    {!isSidebarCollapsed && (
+                      <span className="ml-3 font-medium text-sm">{item.name}</span>
+                    )}
+                    
+                    {/* Tooltip for collapsed state */}
+                    {isSidebarCollapsed && (
+                      <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                        {item.name}
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* User Profile at Bottom */}
+            <div className="mt-auto pt-4 border-t border-gray-200">
+              <button className="w-full flex items-center px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200">
+                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-medium text-gray-600">U</span>
+                </div>
+                {!isSidebarCollapsed && (
+                  <span className="ml-3 font-medium text-sm">Usuario</span>
+                )}
+              </button>
+            </div>
           </nav>
         </div>
 
         {/* Main Content - Full Width on Desktop */}
-        <div className="flex-1 flex flex-col lg:flex-row min-w-0">
+        <div className="flex-1 flex min-w-0">
           {/* Central Surface - Takes most space on desktop */}
           <div className="flex-1 min-w-0">
             <div className="h-full overflow-y-auto">
