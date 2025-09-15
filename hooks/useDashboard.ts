@@ -17,7 +17,21 @@ export function useDashboard() {
       if (!response.ok) throw new Error('Failed to fetch dashboard data')
       
       const data = await response.json()
-      setDashboardData(data)
+      // Ensure safe zero defaults for UI
+      const safe = {
+        habits: data.habits ?? [],
+        goals: data.goals ?? [],
+        todayCheckIn: data.todayCheckIn ?? undefined,
+        weeklyReview: data.weeklyReview ?? undefined,
+        stats: {
+          totalHabits: data.stats?.totalHabits ?? (data.habits ? data.habits.length : 0),
+          completedHabitsToday: data.stats?.completedHabitsToday ?? 0,
+          activeGoals: data.stats?.activeGoals ?? (data.goals ? data.goals.length : 0),
+          currentStreak: data.stats?.currentStreak ?? 0,
+          weeklyProgress: data.stats?.weeklyProgress ?? 0,
+        }
+      }
+      setDashboardData(safe)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {

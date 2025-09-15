@@ -34,11 +34,10 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   const navigation = [
-    { id: 'today', name: 'Hoy', icon: Home, href: '/today' },
-    { id: 'plan', name: 'Plan', icon: Calendar, href: '/plan' },
+    { id: 'solve', name: 'Resolver', icon: Target, href: '/solve' },
     { id: 'progress', name: 'Progreso', icon: BarChart3, href: '/progress' },
     { id: 'library', name: 'Biblioteca', icon: BookOpen, href: '/library' },
-    { id: 'more', name: 'Más', icon: Target, href: '/more' },
+    { id: 'more', name: 'Más', icon: Home, href: '/more' },
   ]
 
   const handleStartAction = (action: any) => {
@@ -67,15 +66,16 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
 
       {/* Main Content Area - Desktop Optimized */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Left Navigation - Desktop Only - Retractable with Hover */}
-        <div 
-          className={`hidden lg:block bg-white border-r border-gray-200 flex-shrink-0 transition-all duration-300 sticky top-0 h-screen ${
-            isSidebarCollapsed ? 'w-16 hover:w-72' : 'w-72'
-          }`}
-          onMouseEnter={() => setIsSidebarCollapsed(false)}
-          onMouseLeave={() => setIsSidebarCollapsed(true)}
-        >
-          <nav className="p-4 space-y-2 h-full flex flex-col">
+        {/* Left Navigation - Desktop Only - Fixed, always visible */}
+        <div className="hidden lg:block">
+          <div
+            className={`fixed top-16 bottom-0 left-0 bg-white border-r border-gray-200 transition-all duration-300 ${
+              isSidebarCollapsed ? 'w-16' : 'w-72'
+            }`}
+            onMouseEnter={() => setIsSidebarCollapsed(false)}
+            onMouseLeave={() => setIsSidebarCollapsed(true)}
+          >
+            <nav className="p-4 space-y-2 h-full flex flex-col overflow-y-auto">
             {/* Header with Toggle Button */}
             <div className="flex items-center justify-between mb-4">
               {!isSidebarCollapsed && (
@@ -138,8 +138,12 @@ export function AppShell({ children, currentPage = 'today' }: AppShellProps) {
                 )}
               </button>
             </div>
-          </nav>
+            </nav>
+          </div>
         </div>
+
+        {/* Spacer to account for fixed sidebar width */}
+        <div className={`hidden lg:block flex-shrink-0 ${isSidebarCollapsed ? 'w-16' : 'w-72'}`}></div>
 
         {/* Main Content - Full Width on Desktop */}
         <div className="flex-1 flex min-w-0">

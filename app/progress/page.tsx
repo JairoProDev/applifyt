@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { AppShell } from '@/components/shell/AppShell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -21,11 +21,13 @@ import {
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useDashboard } from '@/hooks/useDashboard'
 
 export default function ProgressPage() {
   const { data: session } = useSession()
   const router = useRouter()
   const [timeRange, setTimeRange] = useState('week')
+  const { dashboardData } = useDashboard()
 
   if (!session) {
     router.push('/auth/signin')
@@ -39,30 +41,33 @@ export default function ProgressPage() {
     { id: 'year', name: 'Este año', days: 365 }
   ]
 
-  const stats = {
-    habits: {
-      total: 0,
-      completed: 0,
-      streak: 0,
-      bestStreak: 0
-    },
-    goals: {
-      total: 0,
-      completed: 0,
-      inProgress: 0,
-      successRate: 0
-    },
-    productivity: {
-      focusTime: 0,
-      tasksCompleted: 0,
-      efficiency: 0
-    },
-    wellbeing: {
-      averageMood: 0,
-      energyLevel: 0,
-      stressLevel: 0
+  const stats = useMemo(() => {
+    const d = dashboardData
+    return {
+      habits: {
+        total: d?.stats?.totalHabits ?? (d?.habits?.length ?? 0),
+        completed: d?.stats?.completedHabitsToday ?? 0,
+        streak: d?.stats?.currentStreak ?? 0,
+        bestStreak: d?.stats?.currentStreak ?? 0,
+      },
+      goals: {
+        total: d?.stats?.activeGoals ?? (d?.goals?.length ?? 0),
+        completed: d?.goals?.filter?.((g: any) => g.status === 'completed')?.length ?? 0,
+        inProgress: d?.goals?.filter?.((g: any) => g.status === 'active')?.length ?? 0,
+        successRate: 0,
+      },
+      productivity: {
+        focusTime: 0,
+        tasksCompleted: 0,
+        efficiency: 0,
+      },
+      wellbeing: {
+        averageMood: d?.todayCheckIn?.mood ?? 0,
+        energyLevel: d?.todayCheckIn?.energy ?? 0,
+        stressLevel: d?.todayCheckIn?.stress ?? 0,
+      },
     }
-  }
+  }, [dashboardData])
 
   const insights = [
     {
@@ -143,7 +148,7 @@ export default function ProgressPage() {
                     {stats.habits.completed}/{stats.habits.total}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {Math.round((stats.habits.completed / stats.habits.total) * 100)}% de adherencia
+                    {stats.habits.total > 0 ? Math.round((stats.habits.completed / stats.habits.total) * 100) : 0}% de adherencia
                   </p>
                 </div>
                 <div className="p-3 bg-green-100 rounded-full">

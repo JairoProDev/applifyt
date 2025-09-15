@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppShell } from '@/components/shell/AppShell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -18,12 +18,18 @@ import {
   CheckCircle
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import toast from 'react-hot-toast'
+import { useGoals } from '@/hooks/useGoals'
+import { useHabits } from '@/hooks/useHabits'
 
 export default function PlanPage() {
   const { data: session } = useSession()
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('goals')
+  const searchParams = useSearchParams()
+  const { goals, loading: goalsLoading, deleteGoal } = useGoals()
+  const { habits, loading: habitsLoading, deleteHabit } = useHabits()
 
   if (!session) {
     router.push('/auth/signin')
@@ -37,65 +43,7 @@ export default function PlanPage() {
     { id: 'backlog', name: 'Backlog', icon: Flag }
   ]
 
-  const goals = [
-    {
-      id: 1,
-      title: 'Perder 10 kg en 3 meses',
-      description: 'Meta de salud y bienestar personal',
-      category: 'health',
-      priority: 'high',
-      progress: 65,
-      dueDate: '2024-03-15',
-      status: 'active'
-    },
-    {
-      id: 2,
-      title: 'Aprender React avanzado',
-      description: 'Desarrollar habilidades técnicas para el trabajo',
-      category: 'learning',
-      priority: 'medium',
-      progress: 30,
-      dueDate: '2024-04-30',
-      status: 'active'
-    },
-    {
-      id: 3,
-      title: 'Ahorrar $5,000',
-      description: 'Fondo de emergencia para estabilidad financiera',
-      category: 'finance',
-      priority: 'high',
-      progress: 80,
-      dueDate: '2024-06-30',
-      status: 'active'
-    }
-  ]
-
-  const habits = [
-    {
-      id: 1,
-      name: 'Meditar 10 minutos',
-      frequency: 'Diario',
-      category: 'health',
-      streak: 15,
-      status: 'active'
-    },
-    {
-      id: 2,
-      name: 'Leer 30 minutos',
-      frequency: 'Diario',
-      category: 'learning',
-      streak: 7,
-      status: 'active'
-    },
-    {
-      id: 3,
-      name: 'Ejercicio 45 minutos',
-      frequency: '3x por semana',
-      category: 'health',
-      streak: 3,
-      status: 'active'
-    }
-  ]
+  const isLoading = goalsLoading || habitsLoading
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -107,26 +55,29 @@ export default function PlanPage() {
     }
   }
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'danger'
-      case 'medium': return 'warning'
-      case 'low': return 'success'
-      default: return 'gray'
-    }
+  const getPriorityColorByNumber = (priority: number) => {
+    if (priority >= 4) return 'danger'
+    if (priority === 3) return 'warning'
+    if (priority <= 2) return 'success'
+    return 'gray'
   }
 
-  const getPriorityLabel = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'Alta'
-      case 'medium': return 'Media'
-      case 'low': return 'Baja'
-      default: return 'Normal'
-    }
+  const getPriorityLabelByNumber = (priority: number) => {
+    if (priority >= 4) return 'Alta'
+    if (priority === 3) return 'Media'
+    if (priority <= 2) return 'Baja'
+    return 'Normal'
   }
 
   const renderGoals = () => (
     <div className="space-y-4">
+      {goals.length === 0 && (
+        <Card>
+          <CardContent className="p-12 text-center text-gray-600">
+            Aún no tienes metas. Crea tu primera meta para comenzar.
+          </CardContent>
+        </Card>
+      )}
       {goals.map((goal) => (
         <Card key={goal.id} className="hover:shadow-md transition-shadow">
           <CardContent className="p-6">
@@ -134,8 +85,8 @@ export default function PlanPage() {
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-2">
                   <h3 className="text-lg font-semibold text-gray-900">{goal.title}</h3>
-                  <Badge variant={getPriorityColor(goal.priority)} size="sm">
-                    {getPriorityLabel(goal.priority)}
+                  <Badge variant={getPriorityColorByNumber(goal.priority)} size="sm">
+                    {getPriorityLabelByNumber(goal.priority)}
                   </Badge>
                 </div>
                 <p className="text-gray-600 mb-3">{goal.description}</p>
@@ -143,7 +94,7 @@ export default function PlanPage() {
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
-                    <span>Vence: {new Date(goal.dueDate).toLocaleDateString('es-ES')}</span>
+                    <span>Vence: {new Date(goal.timebound).toLocaleDateString('es-ES')}</span>
                   </div>
                   <div className="flex items-center">
                     <Target className="h-4 w-4 mr-1" />
@@ -153,10 +104,23 @@ export default function PlanPage() {
               </div>
               
               <div className="flex items-center space-x-2">
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={() => router.push(`/goals/${goal.id}/edit`)}>
                   <Edit className="h-4 w-4" />
                 </Button>
-                <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-red-600 hover:text-red-700"
+                  onClick={async () => {
+                    if (!confirm('¿Eliminar esta meta?')) return
+                    try {
+                      await deleteGoal(goal.id)
+                      toast.success('Meta eliminada')
+                    } catch (e) {
+                      toast.error('No se pudo eliminar')
+                    }
+                  }}
+                >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -175,7 +139,7 @@ export default function PlanPage() {
         </Card>
       ))}
       
-      <Button className="w-full" variant="outline">
+      <Button className="w-full" variant="outline" onClick={() => router.push('/goals/new')}>
         <Plus className="h-4 w-4 mr-2" />
         Agregar Nueva Meta
       </Button>
@@ -184,12 +148,19 @@ export default function PlanPage() {
 
   const renderHabits = () => (
     <div className="space-y-4">
+      {habits.length === 0 && (
+        <Card>
+          <CardContent className="p-12 text-center text-gray-600">
+            Aún no tienes hábitos. Crea tu primer hábito para comenzar.
+          </CardContent>
+        </Card>
+      )}
       {habits.map((habit) => (
         <Card key={habit.id} className="hover:shadow-md transition-shadow">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className={`p-2 rounded-lg bg-white ${getCategoryColor(habit.category)}`}>
+                <div className="p-2 rounded-lg bg-white text-yellow-600">
                   <Zap className="h-5 w-5" />
                 </div>
                 <div>
@@ -200,14 +171,27 @@ export default function PlanPage() {
               
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <div className="text-lg font-bold text-primary-600">{habit.streak}</div>
+                  <div className="text-lg font-bold text-primary-600">{habit.currentStreak || 0}</div>
                   <div className="text-xs text-gray-500">días</div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button size="sm" variant="outline">
+                  <Button size="sm" variant="outline" onClick={() => router.push(`/habits/${habit.id}/edit`)}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                    onClick={async () => {
+                      if (!confirm('¿Eliminar este hábito?')) return
+                      try {
+                        await deleteHabit(habit.id)
+                        toast.success('Hábito eliminado')
+                      } catch (e) {
+                        toast.error('No se pudo eliminar')
+                      }
+                    }}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -217,7 +201,7 @@ export default function PlanPage() {
         </Card>
       ))}
       
-      <Button className="w-full" variant="outline">
+      <Button className="w-full" variant="outline" onClick={() => router.push('/habits/new')}>
         <Plus className="h-4 w-4 mr-2" />
         Agregar Nuevo Hábito
       </Button>
@@ -272,6 +256,13 @@ export default function PlanPage() {
     <AppShell currentPage="plan">
       <div className="h-full overflow-y-auto">
         <div className="w-full max-w-none px-4 lg:px-6 py-6">
+          {/* Sync tab from query param */}
+          <EffectOnceSetter setTab={setActiveTab} searchParams={searchParams} />
+          {isLoading && (
+            <div className="mb-6">
+              <div className="animate-pulse h-6 bg-gray-200 rounded w-32" />
+            </div>
+          )}
           {/* Header */}
           <div className="mb-8 applify-fade-in">
             <h1 className="text-3xl font-bold text-gray-900 mb-3">Plan</h1>
@@ -318,4 +309,14 @@ export default function PlanPage() {
       </div>
     </AppShell>
   )
+}
+
+function EffectOnceSetter({ setTab, searchParams }: { setTab: (v: string) => void, searchParams: ReturnType<typeof useSearchParams> }) {
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab === 'goals' || tab === 'habits' || tab === 'calendar' || tab === 'backlog') {
+      setTab(tab)
+    }
+  }, [])
+  return null
 }

@@ -25,7 +25,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ onOpenKai, onOpenComposer, currentPage }: TopBarProps) {
-  const { data: dashboardData, isLoading } = useDashboard()
+  const { dashboardData, loading: isLoading } = useDashboard()
   const { theme, toggleTheme } = useTheme()
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -39,10 +39,9 @@ export function TopBar({ onOpenKai, onOpenComposer, currentPage }: TopBarProps) 
 
   const getProgressPercentage = () => {
     if (!dashboardData) return 0
-    const totalActions = dashboardData.habits.length + dashboardData.goals.length
-    const completedActions = dashboardData.habits.filter(h => h.completed).length + 
-                           dashboardData.goals.filter(g => g.completed).length
-    return totalActions > 0 ? Math.round((completedActions / totalActions) * 100) : 0
+    const totalHabits = dashboardData.stats?.totalHabits ?? dashboardData.habits?.length ?? 0
+    const completedHabits = dashboardData.stats?.completedHabitsToday ?? 0
+    return totalHabits > 0 ? Math.round((completedHabits / totalHabits) * 100) : 0
   }
 
   const getProgressColor = (percentage: number) => {
@@ -71,8 +70,7 @@ export function TopBar({ onOpenKai, onOpenComposer, currentPage }: TopBarProps) 
             </h1>
             <span className="text-gray-400">•</span>
             <span className="text-xl font-semibold text-gray-700">
-              {currentPage === 'today' && 'Hoy'}
-              {currentPage === 'plan' && 'Plan'}
+              {currentPage === 'solve' && 'Resolver Problema'}
               {currentPage === 'progress' && 'Progreso'}
               {currentPage === 'library' && 'Biblioteca'}
               {currentPage === 'more' && 'Más'}
@@ -130,7 +128,7 @@ export function TopBar({ onOpenKai, onOpenComposer, currentPage }: TopBarProps) 
                 {getProgressMessage(progressPercentage)}
               </p>
               <p className="text-xs text-gray-500">
-                {isLoading ? 'Cargando...' : `${dashboardData?.habits.filter(h => h.completed).length || 0} hábitos completados`}
+                {isLoading ? 'Cargando...' : `${dashboardData?.stats?.completedHabitsToday ?? 0} hábitos completados`}
               </p>
             </div>
           </div>

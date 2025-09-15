@@ -97,3 +97,30 @@ export interface TimeSeriesData {
   value: number
   label?: string
 }
+
+// Protocol types (for Library)
+export interface Protocol {
+  id: string
+  title: string
+  description?: string
+  category: string
+  difficulty: 'Principiante' | 'Intermedio' | 'Avanzado' | string
+  duration: string
+  tags: string[]
+  steps?: any
+  featured?: boolean
+  createdById?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ProtocolFormData {
+  title: string
+  description?: string
+  category: string
+  difficulty: 'Principiante' | 'Intermedio' | 'Avanzado' | string
+  duration: string
+  tags: string[]
+  steps?: any
+  featured?: boolean
+}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppShell } from '@/components/shell/AppShell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -22,12 +22,17 @@ import {
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+import { useGoals } from '@/hooks/useGoals'
+import { useHabits } from '@/hooks/useHabits'
 
 export default function LibraryPage() {
   const { data: session } = useSession()
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const { createGoal } = useGoals()
+  const { createHabit } = useHabits()
 
   if (!session) {
     router.push('/auth/signin')
@@ -43,76 +48,20 @@ export default function LibraryPage() {
     { id: 'learning', name: 'Aprendizaje', icon: Brain }
   ]
 
-  const protocols = [
-    {
-      id: 1,
-      title: 'Protocolo de Meditación Matutina',
-      description: 'Rutina de 10 minutos para empezar el día con claridad mental',
-      category: 'wellbeing',
-      duration: '10 min',
-      difficulty: 'Principiante',
-      rating: 4.8,
-      users: 1250,
-      tags: ['meditación', 'mañana', 'mindfulness'],
-      featured: true
-    },
-    {
-      id: 2,
-      title: 'Sistema de Hábitos Atómicos',
-      description: 'Implementa el método de James Clear para crear hábitos duraderos',
-      category: 'habits',
-      duration: '30 días',
-      difficulty: 'Intermedio',
-      rating: 4.9,
-      users: 2100,
-      tags: ['hábitos', 'productividad', 'cambio'],
-      featured: true
-    },
-    {
-      id: 3,
-      title: 'WOOP para Metas',
-      description: 'Framework científico para establecer y alcanzar objetivos',
-      category: 'goals',
-      duration: '45 min',
-      difficulty: 'Intermedio',
-      rating: 4.7,
-      users: 890,
-      tags: ['metas', 'planificación', 'éxito']
-    },
-    {
-      id: 4,
-      title: 'Rutina de Ejercicio en Casa',
-      description: 'Workout de 20 minutos sin equipamiento especial',
-      category: 'wellbeing',
-      duration: '20 min',
-      difficulty: 'Principiante',
-      rating: 4.6,
-      users: 1500,
-      tags: ['ejercicio', 'salud', 'casa']
-    },
-    {
-      id: 5,
-      title: 'Técnica Pomodoro Avanzada',
-      description: 'Sistema de productividad con bloques de enfoque y descanso',
-      category: 'productivity',
-      duration: '25 min',
-      difficulty: 'Principiante',
-      rating: 4.5,
-      users: 1800,
-      tags: ['productividad', 'enfoque', 'tiempo']
-    },
-    {
-      id: 6,
-      title: 'Diario de Gratitud',
-      description: 'Práctica diaria para mejorar el bienestar emocional',
-      category: 'wellbeing',
-      duration: '5 min',
-      difficulty: 'Principiante',
-      rating: 4.8,
-      users: 2200,
-      tags: ['gratitud', 'bienestar', 'reflexión']
+  const [protocols, setProtocols] = useState<any[]>([])
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/protocols')
+        const items = await res.json()
+        setProtocols(items)
+      } catch (e) {
+        console.error('Failed to load protocols')
+      }
     }
-  ]
+    load()
+  }, [])
 
   const getCategoryIcon = (category: string) => {
     const cat = categories.find(c => c.id === category)
@@ -148,6 +97,54 @@ export default function LibraryPage() {
     
     return matchesSearch && matchesCategory
   })
+
+  const applyProtocol = async (protocol: any) => {
+    try {
+      if (protocol.category === 'goals') {
+        const draft = await createGoal({
+          title: protocol.title,
+          description: protocol.description || '',
+          type: 'project',
+          level: 1,
+          wish: protocol.title,
+          outcome: 'Resultado deseado',
+          obstacle: 'Obstáculo principal',
+          plan: 'Plan inicial',
+          specific: 'Específico inicial',
+          measurable: 'Medible',
+          achievable: true,
+          relevant: 'Relevante',
+          timebound: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+          priority: 3,
+        })
+        toast.success('Meta creada desde protocolo')
+        router.push('/plan?tab=goals')
+        return draft
+      }
+
+      // default to habit
+      const draftHabit = await createHabit({
+        name: protocol.title,
+        description: protocol.description || '',
+        cue: 'Después de [trigger]',
+        routine: 'Hábito breve',
+        reward: 'Recompensa corta',
+        craving: 'Deseo asociado',
+        frequency: 'daily',
+        targetCount: 1,
+        unit: 'veces',
+        stackAfter: '',
+        stackBefore: '',
+        difficulty: 2,
+        importance: 3,
+      })
+      toast.success('Hábito creado desde protocolo')
+      router.push('/plan?tab=habits')
+      return draftHabit
+    } catch (e) {
+      toast.error('No se pudo aplicar el protocolo')
+    }
+  }
 
   return (
     <AppShell currentPage="library">
@@ -207,7 +204,7 @@ export default function LibraryPage() {
         </div>
 
         {/* Featured Protocols */}
-        {selectedCategory === 'all' && (
+        {selectedCategory === 'all' && protocols.filter(p => p.featured).length > 0 && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Destacados</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -238,21 +235,13 @@ export default function LibraryPage() {
                           <Clock className="h-4 w-4 mr-1" />
                           <span>{protocol.duration}</span>
                         </div>
-                        <div className="flex items-center">
-                          <Users className="h-4 w-4 mr-1" />
-                          <span>{protocol.users.toLocaleString()}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 mr-1" />
-                          <span>{protocol.rating}</span>
-                        </div>
                       </div>
                       
                       <div className="flex items-center justify-between">
                         <Badge variant={getDifficultyColor(protocol.difficulty)} size="sm">
                           {protocol.difficulty}
                         </Badge>
-                        <Button size="sm" className="px-3">
+                        <Button size="sm" className="px-3" onClick={() => applyProtocol(protocol)}>
                           <Play className="h-4 w-4 mr-1" />
                           Aplicar
                         </Button>
@@ -278,7 +267,7 @@ export default function LibraryPage() {
                 <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-500 mb-2">No se encontraron protocolos</p>
                 <p className="text-sm text-gray-400">
-                  Intenta ajustar tu búsqueda o filtros
+                  Pronto agregaremos protocolos reales aquí. Por ahora, captura tus propios playbooks.
                 </p>
               </CardContent>
             </Card>
@@ -307,14 +296,7 @@ export default function LibraryPage() {
                           <Clock className="h-4 w-4 mr-1" />
                           <span>{protocol.duration}</span>
                         </div>
-                        <div className="flex items-center">
-                          <Users className="h-4 w-4 mr-1" />
-                          <span>{protocol.users.toLocaleString()}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 mr-1" />
-                          <span>{protocol.rating}</span>
-                        </div>
+                        {/* Usage and rating will be added later with real data */}
                       </div>
                       
                       <div className="flex flex-wrap gap-1 mb-4">
@@ -333,7 +315,7 @@ export default function LibraryPage() {
                           <Button size="sm" variant="outline" className="px-3">
                             <Download className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" className="px-3">
+                          <Button size="sm" className="px-3" onClick={() => applyProtocol(protocol)}>
                             <Play className="h-4 w-4 mr-1" />
                             Aplicar
                           </Button>

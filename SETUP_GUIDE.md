@@ -276,6 +276,17 @@ curl http://localhost:3000/api/dashboard
 
 ---
 
+## 🧭 Flujos nuevos: Plan y Biblioteca
+
+- Plan usa datos reales con `useGoals` y `useHabits`. Estados vacíos y botones "Agregar" navegan a `/goals/new` y `/habits/new`.
+- Biblioteca carga Protocolos desde `/api/protocols`. "Aplicar" crea una Meta u Hábito (borrador) y navega a `Plan` con la pestaña adecuada (`/plan?tab=goals` o `/plan?tab=habits`).
+- Hay confirmaciones y toasts al eliminar metas/hábitos.
+- `TopBar` usa estadísticas reales del dashboard con valores cero seguros.
+- Páginas `app/error.tsx` y `app/not-found.tsx` para errores y 404 amigables.
+- Hook `useKaiMemory` (interfaz) para preparar memoria de Kai.
+
+---
+
 ## 🛠️ Comandos Útiles
 
 ### Desarrollo

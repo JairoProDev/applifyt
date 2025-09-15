@@ -61,6 +61,7 @@ model User {
   goalProgress  GoalProgress[]
   dailyCheckIns DailyCheckIn[]
   weeklyReviews WeeklyReview[]
+  protocols     Protocol[]
   
   // Assessment relations
   lifeWheelAssessment LifeWheelAssessment?
@@ -271,6 +272,25 @@ model JournalingAssessment {
   entries     Json     // { challenge_analysis: "text", values_alignment: "text", ... }
   completedAt DateTime @default(now())
   
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Content models
+model Protocol {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String   // habits, goals, wellbeing, productivity, learning, etc.
+  difficulty  String   // Principiante, Intermedio, Avanzado
+  duration    String   // Human readable: "10 min", "30 días"
+  tags        String[]
+  steps       Json?    // Structured steps for guided execution
+  featured    Boolean  @default(false)
+
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

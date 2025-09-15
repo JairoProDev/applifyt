@@ -90,7 +90,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme])
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light')
+    if (theme === 'system') {
+      setTheme('light')
+    } else if (theme === 'light') {
+      setTheme('dark')
+    } else {
+      setTheme('system')
+    }
   }
 
   return (
