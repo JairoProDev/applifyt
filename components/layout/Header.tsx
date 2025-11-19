@@ -3,6 +3,7 @@
 import React from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/Button'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { Bell, Settings, User, LogOut } from 'lucide-react'
 import Link from 'next/link'
 
@@ -52,10 +53,12 @@ export function Header() {
         </Link>
         
         <div className="flex items-center space-x-4">
+          <ThemeToggle />
+
           <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
             <Bell className="h-5 w-5" />
           </button>
-          
+
           <Link href="/settings" className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
             <Settings className="h-5 w-5" />
           </Link>

@@ -3,6 +3,7 @@
 import React from 'react'
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
+import { MobileSidebar } from './MobileSidebar'
 import { cn } from '@/lib/utils'
 
 interface LayoutProps {
@@ -15,6 +16,7 @@ export function Layout({ children, showSidebar = true, className }: LayoutProps)
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      {showSidebar && <MobileSidebar />}
       <div className="flex">
         {showSidebar && (
           <div className="hidden md:flex md:w-64 md:flex-col">

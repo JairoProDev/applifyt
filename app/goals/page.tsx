@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Layout } from '@/components/layout/Layout'
 import { GoalCard } from '@/components/goals/GoalCard'
 import { GoalForm } from '@/components/goals/GoalForm'
+import { ProgressModal } from '@/components/goals/ProgressModal'
 import { useGoals } from '@/hooks/useGoals'
 import { Button } from '@/components/ui/Button'
 import { Plus, Search, Target, TrendingUp } from 'lucide-react'
@@ -18,6 +19,7 @@ export default function GoalsPage() {
   
   const [showForm, setShowForm] = useState(false)
   const [editingGoal, setEditingGoal] = useState<any>(null)
+  const [progressGoal, setProgressGoal] = useState<any>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
   const [filterStatus, setFilterStatus] = useState('active')
@@ -216,10 +218,7 @@ export default function GoalsPage() {
                         goal={goal}
                         onEdit={handleEditGoal}
                         onDelete={handleDeleteGoal}
-                        onAddProgress={(goal) => {
-                          // TODO: Implement progress logging modal
-                          console.log('Add progress for goal:', goal)
-                        }}
+                        onAddProgress={(goal) => setProgressGoal(goal)}
                       />
                     ))}
                   </div>
@@ -243,6 +242,17 @@ export default function GoalsPage() {
               />
             </div>
           </div>
+        )}
+
+        {/* Progress Modal */}
+        {progressGoal && (
+          <ProgressModal
+            goal={progressGoal}
+            onClose={() => setProgressGoal(null)}
+            onSuccess={() => {
+              setProgressGoal(null)
+            }}
+          />
         )}
       </div>
     </Layout>
