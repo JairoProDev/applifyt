@@ -16,6 +16,7 @@ import {
   Plus,
   X,
   Menu,
+  Trophy,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
@@ -24,6 +25,7 @@ const navigation = [
   { name: 'Evaluación', href: '/assessment', icon: BookOpen },
   { name: 'Hábitos', href: '/habits', icon: CheckSquare },
   { name: 'Metas', href: '/goals', icon: Target },
+  { name: 'Logros', href: '/achievements', icon: Trophy },
   { name: 'Revisión Semanal', href: '/weekly-review', icon: BookOpen },
   { name: 'Resiliencia', href: '/resilience', icon: Users },
   { name: 'Trascender', href: '/transcend', icon: Users },

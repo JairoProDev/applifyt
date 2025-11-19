@@ -1,0 +1,49 @@
+{
+  "name": "Applifyt - La App del Progreso",
+  "short_name": "Applifyt",
+  "description": "Plataforma completa para el crecimiento personal basada en el Protocolo U.P.L.I.F.T.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0284c7",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "health", "lifestyle"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Ver tu dashboard principal",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Nuevo Hábito",
+      "short_name": "Hábito",
+      "description": "Crear un nuevo hábito",
+      "url": "/habits",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Nueva Meta",
+      "short_name": "Meta",
+      "description": "Crear una nueva meta",
+      "url": "/goals",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

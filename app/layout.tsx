@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
+import { RegisterServiceWorker } from './register-sw'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -11,6 +12,13 @@ export const metadata: Metadata = {
   description: 'La plataforma para el crecimiento personal. Administra cada área de tu vida con el Protocolo U.P.L.I.F.T.',
   keywords: ['crecimiento personal', 'hábitos', 'metas', 'productividad', 'desarrollo personal'],
   authors: [{ name: 'Applify Team' }],
+  manifest: '/manifest.json',
+  themeColor: '#0284c7',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Applifyt',
+  },
 }
 
 export const viewport = {
@@ -27,6 +35,7 @@ export default function RootLayout({
     <html lang="es" className="h-full">
       <body className={`${inter.className} h-full`}>
         <Providers>
+          <RegisterServiceWorker />
           {children}
           <Toaster
             position="top-right"
